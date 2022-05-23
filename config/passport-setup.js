@@ -22,6 +22,7 @@ passport.use(
       clientSecret: keys.google.clientSecret,
     },
     (accessToken, refreshToken, profile, done) => {
+      console.log("profile from google", profile);
       //  check if user already exists
       User.findOne({
         googleid: profile.id,
@@ -33,6 +34,9 @@ passport.use(
           new User({
             username: profile.displayName,
             googleid: profile.id,
+            thumbnail: profile._json.picture
+              ? profile._json.picture
+              : "there is no image to display",
           })
             .save()
             .then((newUser) => {
